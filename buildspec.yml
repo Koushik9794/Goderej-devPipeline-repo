@@ -8,8 +8,9 @@ phases:
       - echo "Installing dependencies..."
       - npm install
       - chmod +x node_modules/.bin/vite
+
       - echo "Logging in to Amazon ECR..."
-      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 575012135500.dkr.ecr.ap-south-1.amazonaws.com
+      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 319353007797.dkr.ecr.ap-south-1.amazonaws.com
 
   build:
     commands:
@@ -20,15 +21,15 @@ phases:
       - docker build -t demo-dev-frontend .
 
       - echo "Tagging Docker image..."
-      - docker tag demo-dev-frontend:latest 575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest
+      - docker tag demo-dev-frontend:latest 319353007797.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest
 
   post_build:
     commands:
       - echo "Pushing Docker image to ECR..."
-      - docker push 575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest
+      - docker push 319353007797.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest
 
       - echo "Creating imagedefinitions.json for ECS..."
-      - printf '[{"name":"frontend","imageUri":"575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest"}]' > imagedefinitions.json
+      - printf '[{"name":"frontend","imageUri":"319353007797.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest"}]' > imagedefinitions.json
       - cat imagedefinitions.json
 
 artifacts:
