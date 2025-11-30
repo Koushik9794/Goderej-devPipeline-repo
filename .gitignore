@@ -1,0 +1,67 @@
+# Node modules
+node_modules/
+
+# Build outputs
+dist/
+build/
+.tmp/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Editor folders
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# AWS CDK / SAM / Amplify junk files (if used)
+.aws-sam/
+cdk.out/
+amplify/#current-cloud-backend/
+amplify/backend/
+amplify/#current-cloud-front/
+amplify/.config/
+
+# Docker
+*.log
+docker-compose.override.yml
+
+# Dependency caching
+.pnpm-store/
+.cache/
+
+# Coverage reports
+coverage/
+*.lcov
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Build artifacts from CodeBuild
+imagedefinitions.json
+buildspec-local.yml
+
+# React / Vite cache
+node_modules/
+dist/
+.cache/
+vite.config.ts.timestamp-*
+vite.config.js.timestamp-*
+
+# Python (if used in utilities)
+__pycache__/
+*.pyc
+
+# Temp files
+*.tmp
