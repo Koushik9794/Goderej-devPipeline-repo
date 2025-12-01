@@ -1,0 +1,6 @@
+[
+  {
+    "name": "frontend",
+    "imageUri": "319353007797.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest"
+  }
+]
