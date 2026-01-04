@@ -1,5 +1,12 @@
 version: 0.2
 
+env:
+  variables:
+    AWS_ACCOUNT_ID: 319353007797
+    AWS_DEFAULT_REGION: ap-southeast-1
+    ECR_REPO: godrej-dev-app
+    CONTAINER_NAME: app
+
 phases:
   install:
     runtime-versions:
@@ -7,10 +14,11 @@ phases:
     commands:
       - echo "Installing dependencies..."
       - npm install
-      - chmod +x node_modules/.bin/vite
 
-      - echo "Logging in to Amazon ECR..."
-      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 319353007797.dkr.ecr.ap-south-1.amazonaws.com
+      - echo "Logging in to Amazon ECR (Singapore)..."
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION |
+        docker login --username AWS --password-stdin \
+        $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
 
   build:
     commands:
@@ -18,24 +26,25 @@ phases:
       - npm run build
 
       - echo "Building Docker image..."
-      - docker build -t demo-dev-frontend .
+      - docker build -t $ECR_REPO .
 
       - echo "Tagging Docker image..."
-      - docker tag demo-dev-frontend:latest 319353007797.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest
+      - docker tag $ECR_REPO:latest \
+        $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO:latest
 
   post_build:
     commands:
-      - echo "Pushing Docker image to ECR..."
-      - docker push 319353007797.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest
+      - echo "Pushing Docker image to ECR (Singapore)..."
+      - docker push \
+        $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO:latest
 
       - echo "Creating imagedefinitions.json for ECS..."
-      - printf '[{"name":"demo-dev-frontend","imageUri":"319353007797.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest"}]' > imagedefinitions.json
+      - printf '[{"name":"%s","imageUri":"%s"}]' \
+        "$CONTAINER_NAME" \
+        "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO:latest" \
+        > imagedefinitions.json
       - cat imagedefinitions.json
 
 artifacts:
   files:
     - imagedefinitions.json
-
-cache:
-  paths:
-    - node_modules/**/*
